@@ -1,0 +1,115 @@
+import datetime
+from app import db 
+from app.utils import ellipsize_text
+
+class ProjetoDeLei(db.Model):
+    __tablename__ = 'PROJETO_DE_LEI'
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(255), nullable=False)
+    dataPublicacao = db.Column(db.String(255), nullable=False)
+    urlProposicao = db.Column(db.String(255), nullable=False)
+
+    @staticmethod
+    def add(id, nome, dataPublicacao, urlProposicao):
+        projeto = ProjetoDeLei(id=id, nome=nome, dataPublicacao=dataPublicacao, urlProposicao=urlProposicao)
+        db.session.add(projeto)
+        db.session.commit()
+        return projeto
+
+    @classmethod
+    def get_last_dataPublicacao(cls):
+        projeto = cls.query.order_by(cls.dataPublicacao.desc()).first()
+        if projeto:
+            return projeto.dataPublicacao
+        return None
+
+class Proposicao(db.Model):
+    __tablename__ = 'PROPOSICAO'
+    id = db.Column(db.Integer, primary_key=True)
+    nomeAutor = db.Column(db.String(255), nullable=False)
+    projetoId = db.Column(db.Integer, db.ForeignKey('PROJETO_DE_LEI.id'), nullable=False)
+    accepted = db.Column(db.Boolean, default=False)
+    projeto = db.relationship('ProjetoDeLei', backref='proposicoes')
+
+    @staticmethod
+    def add(nomeAutor, projetoId):
+        proposicao = Proposicao(nomeAutor=nomeAutor, projetoId=projetoId)
+        db.session.add(proposicao)
+        db.session.commit()
+        return proposicao
+
+    def get_proposal_summary_by_id(id):
+        query = (db.session.query(
+                    db.func.concat(ProjetoDeLei.id).label('id'),
+                    ProjetoDeLei.nome.label('nomeLei'),
+                    ProjetoDeLei.dataPublicacao,
+                    Proposicao.nomeAutor,
+                    ProjetoDeLeiResumo.resumoTitulo,
+                    ProjetoDeLeiResumo.resumoProjeto
+                )
+                .join(Proposicao, ProjetoDeLei.id == Proposicao.projetoId)
+                .join(ProjetoDeLeiResumo, ProjetoDeLei.id == ProjetoDeLeiResumo.projetoId)
+                .filter(ProjetoDeLei.id == id))
+
+        proposal = query.first()._asdict()
+
+        return query.first()
+
+    def get_all_proposal_summary():
+        proposals = Proposicao.query.join(ProjetoDeLei).join(ProjetoDeLeiResumo).with_entities(
+            ProjetoDeLei.id.label('id'),
+            ProjetoDeLei.nome.label('nomeLei'),
+            ProjetoDeLei.dataPublicacao,
+            Proposicao.nomeAutor,
+            ProjetoDeLeiResumo.resumoTitulo,
+            ProjetoDeLeiResumo.resumoProjeto
+        ).order_by(ProjetoDeLei.dataPublicacao.desc()).all()
+        return [proposal._asdict() for proposal in proposals]
+
+    def count_pages(total, per_page=10):
+        return total // per_page + (1 if total % per_page < 1 and total % per_page > 0 > 0 else 0)
+
+    def get_all_proposal_summary_paginated(page=1, per_page=10):
+        page = Proposicao.query.join(ProjetoDeLei).join(ProjetoDeLeiResumo).with_entities(
+            ProjetoDeLei.id.label('id'),
+            ProjetoDeLei.nome.label('nomeLei'),
+            ProjetoDeLei.dataPublicacao,
+            Proposicao.nomeAutor,
+            ProjetoDeLeiResumo.resumoTitulo,
+            ProjetoDeLeiResumo.resumoProjeto
+        ).order_by(ProjetoDeLei.dataPublicacao.desc()).paginate(page=page, per_page=per_page, count=True)
+
+        proposals = [{
+            'id': proposal.id,
+            'nomeLei': proposal.nomeLei,
+            'dataPublicacao': proposal.dataPublicacao,
+            'nomeAutor': proposal.nomeAutor,
+            'resumoTitulo': proposal.resumoTitulo,
+            'resumoProjeto': ellipsize_text(proposal.resumoProjeto, 35) 
+        } for proposal in page.items]
+
+        num_pages = Proposicao.count_pages(page.total, per_page)
+
+        return {
+            'proposals': proposals,
+            'current_page': page.page,
+            'per_page': page.per_page,
+            'total': page.total,
+            'num_pages': num_pages
+        }
+
+class ProjetoDeLeiResumo(db.Model):
+    __tablename__ = 'PROJETO_DE_LEI_RESUMO'
+    id = db.Column(db.Integer, primary_key=True)
+    resumoProjeto = db.Column(db.Text, nullable=False)
+    dataPublicacaoAdicionada = db.Column(db.DateTime, default=datetime.time, nullable=False)
+    projetoId = db.Column(db.Integer, db.ForeignKey('PROJETO_DE_LEI.id'), nullable=False)
+    resumoTitulo = db.Column(db.String(255))
+    projeto = db.relationship('ProjetoDeLei', backref='resumos')
+
+    @staticmethod
+    def add(resumoProjeto, projetoId, resumoTitulo=None):
+        resumo = ProjetoDeLeiResumo(resumoProjeto=resumoProjeto, projetoId=projetoId, resumoTitulo=resumoTitulo)
+        db.session.add(resumo)
+        db.session.commit()
+        return resumo

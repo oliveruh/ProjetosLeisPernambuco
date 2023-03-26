@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>Novas Leis de Pernambuco</title>
+      <link rel="icon" href="../static/img/pe-flag.webp" type="image/gif" >
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <link rel="stylesheet" href="../static/css/law_proposal.css">
+   </head>
+   <body>
+      <div class="header" onclick="location.href='/';" style="cursor: pointer;">
+         <img class="north-lion" src="../static/img/north-lion.webp" />
+         <h1>Novas Leis de Pernambuco</h1>
+         <img class="pe-flag" src="../static/img/pe-flag.webp" />
+      </div>
+      <div class="container">
+         <ul class="list">
+            <li>
+               <h2>{{ proposal['resumoTitulo'] }}</h2>
+               <hr>
+               <h3><b>{{ proposal['nomeLei'] }}</b>, proposto por <b>{{ proposal['nomeAutor'] }}</b>.</h3>
+               <p class="resumo">{{ proposal['resumoProjeto'] }}</p>
+               <hr>
+               <p class="date-published">Publicado no Diário Oficial de Pernambuco em {{ proposal['dataPublicacao'] }}. <a href="{{ 'https://www.alepe.pe.gov.br/proposicao-texto-completo/?docid=' + proposal['id'] + '&tipoprop=p' }}" target="_blank">Texto Original → </a> </p>
+            </li>
+         </ul>
+      </div>
+   </body>
+</html>

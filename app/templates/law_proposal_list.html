@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Novas Leis de Pernambuco</title>
+	<link rel="icon" href="../static/img/pe-flag.webp" type="image/gif" >
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<link rel="stylesheet" href="../static/css/law_proposal_list.css">
+</head>
+<body>
+	<div class="header" onclick="location.href='/';" style="cursor: pointer;">
+	   <img class="north-lion" src="../static/img/north-lion.webp" />
+	   <h1>Novas Leis de Pernambuco</h1>
+	   <img class="pe-flag" src="../static/img/pe-flag.webp" />
+	</div>
+	<div class="container">
+	   <ul class="list">
+		{% for proposal in proposals %}
+		  <li>
+			 <div class="title">
+				<h2 onclick="location.href='/projeto-de-lei/{{ proposal['id'] }}.html';" style="cursor: pointer;">{{ proposal['resumoTitulo'] }}</h2>
+				<p class="date-published">Publicado em {{ proposal['dataPublicacao'] }}</p>
+			 </div>
+			 <hr>
+			<h3><b>{{ proposal['nomeLei'] }}</b>, proposto por <b>{{ proposal['nomeAutor'] }}</b>.</h3>
+			 <p class="resumo">{{ proposal['resumoProjeto'] }}</p>
+			 <span class="read-more"><a href="/projeto-de-lei/{{ proposal['id'] }}.html">Leia Mais</a></span>
+		  </li>
+		{% endfor %}
+	   </ul>
+
+	   <div class="center">
+			<div class="pagination">
+				{% if current_page != 1 %}
+					<a href="/p/{{ current_page - 1 }}.html">&laquo;</a>
+				{% endif %}
+				{% for page in range(1, pages + 1) %}
+					{% if page == 1 and page != current_page %}
+						<a href="/">{{ 1 }}</a>
+					{% elif page == 1 and page == current_page %}
+						<a href="/" class="active">{{ page }}</a>
+					{% endif %}
+					{% if page == current_page and page != 1 %}
+						<a href="/p/{{ page }}.html" class="active">{{ page }}</a>
+					{% elif page != 1 %}
+						<a href="/p/{{ page }}.html">{{ page }}</a> 
+					{% endif %}
+				{% endfor %}
+				{% if current_page != pages - 1 %}
+					<a href="/p/{{ current_page + 1 }}.html">&raquo;</a>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+ </body>
+ </html>
