@@ -66,9 +66,6 @@ class Proposicao(db.Model):
         ).order_by(ProjetoDeLei.dataPublicacao.desc()).all()
         return [proposal._asdict() for proposal in proposals]
 
-    def count_pages(total, per_page=10):
-        return total // per_page + (1 if total % per_page < 1 and total % per_page > 0 > 0 else 0)
-
     def get_all_proposal_summary_paginated(page=1, per_page=10):
         page = Proposicao.query.join(ProjetoDeLei).join(ProjetoDeLeiResumo).with_entities(
             ProjetoDeLei.id.label('id'),
@@ -88,14 +85,9 @@ class Proposicao(db.Model):
             'resumoProjeto': ellipsize_text(proposal.resumoProjeto, 35) 
         } for proposal in page.items]
 
-        num_pages = Proposicao.count_pages(page.total, per_page)
-
         return {
             'proposals': proposals,
-            'current_page': page.page,
-            'per_page': page.per_page,
-            'total': page.total,
-            'num_pages': num_pages
+            'pagination': page
         }
 
 class ProjetoDeLeiResumo(db.Model):
