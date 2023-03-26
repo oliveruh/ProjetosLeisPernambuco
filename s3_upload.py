@@ -10,6 +10,8 @@ app = create_app()
 # from the command-line
 local_directory = sys.argv[1:2]
 
+local_directory = local_directory[0]
+
 client = boto3.client('s3', aws_access_key_id=app.config['AWS_ACCESS_KEY'], aws_secret_access_key=app.config['AWS_SECRET_ACCESS_KEY'])
 bucket = app.config['S3_BUCKET']
 
