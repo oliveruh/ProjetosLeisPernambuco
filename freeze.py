@@ -1,7 +1,8 @@
-from app import app
+from app import create_app
 from flask_frozen import Freezer
 from app.models import Proposicao
 
+app = create_app()
 freezer = Freezer(app)
 
 @freezer.register_generator
