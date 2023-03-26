@@ -7,7 +7,7 @@ freezer = Freezer(app)
 
 @freezer.register_generator
 def page():
-    return [('app.page', {'num_page': int(page)}) for page in range(1, Proposicao.get_all_proposal_summary_paginated()['pagination']['pages'] + 1)]
+    return [('app.page', {'num_page': int(page)}) for page in range(1, Proposicao.get_all_proposal_summary_paginated()['pagination'].pages + 1)]
 
 @freezer.register_generator
 def proposal():
