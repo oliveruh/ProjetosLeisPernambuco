@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html>
    <head>
-      <title>Novas Leis de Pernambuco</title>
+      <title>{{ proposal['resumoTitulo'] }} | Novas Leis de Pernambuco</title>
+      <meta name='og:type' content='website' />
+      <meta name='description' content="{{ proposal['resumoProjeto'] }}" />
       <link rel="icon" href="../static/img/pe-flag.webp" type="image/gif" >
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
       <link rel="stylesheet" href="../static/css/law_proposal.css">
-      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@ProjetosLeisPE" />
       <meta name="twitter:creator" content="@oliveruh_" />
       <meta property="og:url" content="{{ '/projeto-de-lei/' + proposal['id'] }}" />
-      <meta property="og:title" content="{{ proposal['resumoTitulo'] }}r" />
+      <meta property="og:title" content="{{ proposal['resumoTitulo'] }}" />
       <meta property="og:description" content="{{ proposal['resumoProjeto'] }}" />
       <meta property="og:image" content="https://via.placeholder.com/600x400/cacf85/FFF?text=LEI+PUBLICADA" />
    </head>
