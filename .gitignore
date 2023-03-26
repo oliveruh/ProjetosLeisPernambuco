@@ -1,0 +1,38 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local development settings
+.env
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+
+# Database files
+*.db
+
+# Build output
+app/build/
+
+# Dependencies
+venv/
+__pycache__/
+lib/
+include/
+bin/
+*.egg-info/
+dist/
+*.egg
+*.eggs/
+*.pyc
+
+# Editor-specific files
+.idea/
+.vscode/
+
+# Other files to ignore
+.DS_Store
+Thumbs.db
