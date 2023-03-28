@@ -12,13 +12,13 @@ env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
 jobs:
-  scrape-latest:
+  law-proposal-webscrapper:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Baixando repositório
         uses: actions/checkout@v2
-      - name: Set up Python
+      - name: Configurando Python
         uses: actions/setup-python@v2.0.0
         with:
           python-version: '3.11'
@@ -40,7 +40,9 @@ jobs:
           envkey_DATABASE_URI: ${{ secrets.DATABASE_URI }}
       - name: Procurando por novos Projetos de Lei publicados...
         run: python scrap.py
-      - name: Construindo arquivos HTML...
+      - name: Construindo arquivos HTML
+        if: ${{ env.SUCCESS }} == 'true'
         run: python freeze.py
       - name: Subindo site para o S3
+        if: ${{ env.SUCCESS }} == 'true'
         run: python s3_upload.py app/build/

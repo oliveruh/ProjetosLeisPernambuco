@@ -4,8 +4,15 @@ from scrapper.proposal import scrap_new_law_proposal
 from app.models import ProjetoDeLei
 from app.models import Proposicao
 from app.models import ProjetoDeLeiResumo
+import os
 
 create_app().app_context().push()
+
+def success(value):
+    env_file = os.getenv('GITHUB_ENV')
+
+    with open(env_file, "a") as myfile:
+        myfile.write(f"SUCCESS={value}")
 
 proposals = scrap_current_proposals()
 last_proposal_date = ProjetoDeLei.get_last_dataPublicacao()
@@ -18,6 +25,8 @@ for i in range(len(proposals)):
     if proposals[i]['Data da publicação'] > last_proposal_date:
         qntd_proposals += 1
         proposals.append(proposals[i])
+
+success('true')
 
 if qntd_proposals == 1:
     print('New proposal found!')
@@ -33,6 +42,7 @@ elif (qntd_proposals > 50):
     proposals.append(scrap_current_proposals(3))
 else:
     print('No new proposals found!')
+    success('false')
 
 for i in range(len(new_proposals)):
     try:
