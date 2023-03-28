@@ -1,4 +1,4 @@
-name: Scrape
+name: Projetos de Lei de Pernambuco (WebScrapping + AI)
 
 on:
   schedule:
@@ -22,9 +22,9 @@ jobs:
         uses: actions/setup-python@v2.0.0
         with:
           python-version: '3.11'
-      - name: Install requirements
+      - name: Instalando dependências
         run: pip install -r requirements.txt
-      - name: Make envfile
+      - name: Criando arquivo com variáveis de ambiente
         uses: SpicyPizza/create-envfile@v1.3
         with:
           envkey_FLASK_APP: ${{ secrets.FLASK_APP }}
@@ -38,9 +38,9 @@ jobs:
           envkey_EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
           envkey_RECEIVER_EMAIL: ${{ secrets.RECEIVER_EMAIL }}
           envkey_DATABASE_URI: ${{ secrets.DATABASE_URI }}
-      - name: Run Scraper
+      - name: Procurando por novos Projetos de Lei publicados...
         run: python scrap.py
-      - name: Run Freezer
+      - name: Construindo arquivos HTML...
         run: python freeze.py
-      - name: Run s3 Uploader
+      - name: Subindo site para o S3
         run: python s3_upload.py app/build/
