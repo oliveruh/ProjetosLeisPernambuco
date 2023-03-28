@@ -43,4 +43,4 @@ jobs:
       - name: Run Freezer
         run: python freeze.py
       - name: Run s3 Uploader
-        run: python s3_upload.py
+        run: python s3_upload.py app/build/
