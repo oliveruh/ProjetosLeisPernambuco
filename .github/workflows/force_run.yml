@@ -1,0 +1,41 @@
+name: Projetos de Lei de Pernambuco (WebScrapping + AI)
+
+on:
+  workflow_dispatch:
+
+env:
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+
+jobs:
+  law-proposal-webscrapper:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixando repositório
+        uses: actions/checkout@v2
+      - name: Configurando Python
+        uses: actions/setup-python@v2.0.0
+        with:
+          python-version: '3.11'
+      - name: Instalando dependências
+        run: pip install -r requirements.txt
+      - name: Criando arquivo com variáveis de ambiente
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          envkey_FLASK_APP: ${{ secrets.FLASK_APP }}
+          envkey_AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          envkey_AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          envkey_S3_BUCKET: ${{ secrets.S3_BUCKET }}
+          envkey_OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          envkey_SENDER_EMAIL_USERNAME: ${{ secrets.SENDER_EMAIL_USERNAME }}
+          envkey_SENDER_EMAIL_PASSWORD: ${{ secrets.SENDER_EMAIL_PASSWORD }}
+          envkey_EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+          envkey_EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
+          envkey_RECEIVER_EMAIL: ${{ secrets.RECEIVER_EMAIL }}
+          envkey_DATABASE_URI: ${{ secrets.DATABASE_URI }}
+      - name: Procurando por novos Projetos de Lei publicados...
+        run: python scrap.py
+      - name: Construindo arquivos HTML
+        run: python freeze.py
+      - name: Subindo site para o S3
+        run: python s3_upload.py app/build/
