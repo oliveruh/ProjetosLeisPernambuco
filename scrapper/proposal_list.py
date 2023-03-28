@@ -31,10 +31,10 @@ def parse_data(response):
 
 def scrap_current_proposals(page=1):
 
-    log.info("Scraping current propositions...")
+    log.info(f"Scraping proposals, on page {page}...")
     response = scrap_proposal_list(page)
 
-    log.info("Parseando tabela...")
+    log.info("Proccessing table data...")
     table = parse_data(response)
 
     table_data = []
@@ -43,6 +43,6 @@ def scrap_current_proposals(page=1):
         row_data = [data['href'].replace('=', '&').split('&')[1] for data in row.find_all("td")[1]] + [data.text for data in row.find_all("td")] + ['http://www.alepe.pe.gov.br' + data['href'] for data in row.find_all("td")[1]] 
         table_data.append(dict(zip(headers, row_data)))
 
-    log.info("Returning data...")
+    log.info("Returning table data...")
     return table_data
 
