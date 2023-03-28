@@ -41,8 +41,8 @@ jobs:
       - name: Procurando por novos Projetos de Lei publicados...
         run: python scrap.py
       - name: Construindo arquivos HTML
-        if: ${{ env.SUCCESS == 'true' }}
+        if: ${{ env.SUCCESS_SCRAPPING == 'true' }}
         run: python freeze.py
       - name: Subindo site para o S3
-        if: ${{ env.SUCCESS  == 'true' }}
+        if: ${{ env.SUCCESS_SCRAPPING  == 'true' }}
         run: python s3_upload.py app/build/

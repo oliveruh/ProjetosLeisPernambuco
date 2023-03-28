@@ -8,11 +8,11 @@ import os
 
 create_app().app_context().push()
 
-def success(value):
+def success_scrapping(value):
     env_file = os.getenv('GITHUB_ENV')
 
     with open(env_file, "a") as myfile:
-        myfile.write(f"SUCCESS={value}")
+        myfile.write(f"SUCCESS_SCRAPPING={value}")
 
 proposals = scrap_current_proposals()
 last_proposal_date = ProjetoDeLei.get_last_dataPublicacao()
@@ -36,7 +36,7 @@ if qntd_proposals > 0:
         new_proposals_msg += '\nMore than 25 proposals found!\nGoing to second page...'
         new_proposals.extend(scrap_current_proposals(2))
 
-success(success_status)
+success_scrapping(success_status)
 print(new_proposals_msg)
 
 for i in range(len(new_proposals)):
