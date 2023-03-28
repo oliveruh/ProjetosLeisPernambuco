@@ -41,6 +41,6 @@ jobs:
       - name: Run Scraper
         run: python scrap.py
       - name: Run Freezer
-        run: python freezer.py
+        run: python freeze.py
       - name: Run s3 Uploader
         run: python s3_upload.py
