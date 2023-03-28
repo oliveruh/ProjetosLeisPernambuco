@@ -8,10 +8,13 @@ from scrapper.proposal import scrap_new_law_proposal
 
 from app.models import ProjetoDeLei, ProjetoDeLeiResumo, Proposicao
 
+# Setting up logging
+logging.basicConfig(level=logging.NOTSET)
 log = logging.getLogger(__name__)
 
-
+# Setting up app context
 create_app().app_context().push()
+
 
 def success_scrapping(value):
     env_file = os.getenv('GITHUB_ENV')
