@@ -1,0 +1,46 @@
+name: Scrape
+
+on:
+  schedule:
+    - cron: "0 13 * * 1-5"
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+env:
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+
+jobs:
+  scrape-latest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2.0.0
+        with:
+          python-version: '3.11'
+      - name: Install requirements
+        run: pip install -r requirements.txt
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          envkey_FLASK_APP: ${{ secrets.FLASK_APP }}
+          envkey_AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          envkey_AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          envkey_S3_BUCKET: ${{ secrets.S3_BUCKET }}
+          envkey_OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          envkey_SENDER_EMAIL_USERNAME: ${{ secrets.SENDER_EMAIL_USERNAME }}
+          envkey_SENDER_EMAIL_PASSWORD: ${{ secrets.SENDER_EMAIL_PASSWORD }}
+          envkey_EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+          envkey_EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
+          envkey_RECEIVER_EMAIL: ${{ secrets.RECEIVER_EMAIL }}
+          envkey_DATABASE_URI: ${{ secrets.DATABASE_URI }}
+      - name: Run Scraper
+        run: python scrap.py
+      - name: Run Freezer
+        run: python freezer.py
+      - name: Run s3 Uploader
+        run: python s3_upload.py
