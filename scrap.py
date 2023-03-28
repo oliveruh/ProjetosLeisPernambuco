@@ -19,30 +19,25 @@ last_proposal_date = ProjetoDeLei.get_last_dataPublicacao()
 
 print('Searching for new proposals...')
 
-qntd_proposals = 0
-new_proposals = []
-for i in range(len(proposals)):
-    if proposals[i]['Data da publicação'] > last_proposal_date:
-        qntd_proposals += 1
-        proposals.append(proposals[i])
+new_proposals = [proposal for proposal in proposals if proposal['Data da publicação'] > last_proposal_date]
 
-success('true')
+qntd_proposals = len(new_proposals)
+new_proposals_msg = 'No new proposals found!'
+success_status = 'false'
 
-if qntd_proposals == 1:
-    print('New proposal found!')
-elif (qntd_proposals > 1):
-    print('New proposals found!')
-elif (qntd_proposals > 25):
-    print('More than 25 proposals found!')
-    print('Going to second page...')
-    proposals.append(scrap_current_proposals(2))
-elif (qntd_proposals > 50):
-    print('More than 50 proposals found!')
-    print('Going to third page...')
-    proposals.append(scrap_current_proposals(3))
-else:
-    print('No new proposals found!')
-    success('false')
+if qntd_proposals > 0:
+    success_status = 'true'
+    new_proposals_msg = f'New proposal{"s" if qntd_proposals > 1 else ""} found!'
+
+    if qntd_proposals > 50:
+        new_proposals_msg += '\nMore than 50 proposals found!\nGoing to third page...'
+        new_proposals.extend(scrap_current_proposals(3))
+    elif qntd_proposals > 25:
+        new_proposals_msg += '\nMore than 25 proposals found!\nGoing to second page...'
+        new_proposals.extend(scrap_current_proposals(2))
+
+success(success_status)
+print(new_proposals_msg)
 
 for i in range(len(new_proposals)):
     try:
