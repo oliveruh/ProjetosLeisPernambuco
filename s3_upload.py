@@ -54,6 +54,10 @@ for root, dirs, files in os.walk(local_directory):
                 client.upload_file(local_path, bucket, s3_key, ExtraArgs={'ContentType': "text/css"})
             elif (s3_key.split('.')[1] == 'json'):
                 client.upload_file(local_path, bucket, s3_key, ExtraArgs={'ContentType': "application/json"})
+            elif (s3_key.split('.')[1] == 'xml'):
+                client.upload_file(local_path, bucket, s3_key, ExtraArgs={'ContentType': "application/xml"})
+            elif (s3_key.split('.')[1] == 'txt'):
+                client.upload_file(local_path, bucket, s3_key, ExtraArgs={'ContentType': "text/plain"})
             else:
                 client.upload_file(local_path, bucket, s3_key)
         else:

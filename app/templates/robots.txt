@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /raly/stuff/didItDeploy/calendarDeploy.html
+Sitemap: https://projetoslei.org.pe/sitemap.xml
