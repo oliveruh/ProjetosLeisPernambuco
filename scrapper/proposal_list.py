@@ -1,5 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
+import logging
+
+# Setting up logging
+logging.basicConfig(level=logging.NOTSET)
+log = logging.getLogger(__name__)
+
 
 def scrap_proposal_list(page):
     url = "http://www.alepe.pe.gov.br/proposicoes"
@@ -25,10 +31,10 @@ def parse_data(response):
 
 def scrap_current_proposals(page=1):
 
-    print("Scraping current propositions...")
+    log.info("Scraping current propositions...")
     response = scrap_proposal_list(page)
 
-    print("Parseando tabela...")
+    log.info("Parseando tabela...")
     table = parse_data(response)
 
     table_data = []
@@ -37,6 +43,6 @@ def scrap_current_proposals(page=1):
         row_data = [data['href'].replace('=', '&').split('&')[1] for data in row.find_all("td")[1]] + [data.text for data in row.find_all("td")] + ['http://www.alepe.pe.gov.br' + data['href'] for data in row.find_all("td")[1]] 
         table_data.append(dict(zip(headers, row_data)))
 
-    print("Returning data...")
+    log.info("Returning data...")
     return table_data
 

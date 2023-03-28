@@ -1,6 +1,12 @@
 from app import create_app
 import yagmail
+import logging
 
+# Setting up logging
+logging.basicConfig(level=logging.NOTSET)
+log = logging.getLogger(__name__)
+
+# Setting up app context
 app = create_app()
 
 smtp_server = app.config['EMAIL_HOST']
@@ -10,7 +16,7 @@ sender_password = app.config['SENDER_EMAIL_PASSWORD']
 receiver_email = app.config['RECEIVER_EMAIL']
 
 def send_email(subject, message):
-    print("Enviando e-mail com log de erro...")
+    log.info("Enviando e-mail com log de erro...")
 
     yag = yagmail.SMTP(sender_email, sender_password)
 

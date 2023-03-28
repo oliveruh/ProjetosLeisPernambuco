@@ -1,10 +1,15 @@
 from bs4 import BeautifulSoup
 import requests
 import json
+import logging
 import string
 from scrapper.utils.gpt_helper import ask_gpt_3_to_explain_law
 from scrapper.utils.json_helper import validateJSON
 from scrapper.utils.mail_helper import get_erro_message, get_erro_subject, send_email
+
+# Setting up logging
+logging.basicConfig(level=logging.NOTSET)
+log = logging.getLogger(__name__)
 
 
 def scrapping_alepe(url):
@@ -20,10 +25,10 @@ def parse_data_texto_lei(projetoSoup):
 
 def scrap_new_law_proposal(proposal, proposalIndex):
 
-    print("Scraping " + proposal['Proposição'] + "...")
+    log.info("Scraping " + proposal['Proposição'] + "...")
     projetoSoup = scrapping_alepe(proposal['Link'])
 
-    print("Parsing data...")
+    log.info("Processando dados...")
     textoLei, justificativa = parse_data_texto_lei(projetoSoup)
 
     # Cheking text size
@@ -34,17 +39,17 @@ def scrap_new_law_proposal(proposal, proposalIndex):
         send_email(get_erro_subject('textoGrande'), get_erro_message('textoGrande', proposal, proposalIndex))
         raise Exception("Texto muito grande, não foi possível persistir a proposta " + proposal['Proposição'])
 
-    print("Enviando para o GPT-3...")
+    log.info("Enviando para o GPT-3...")
     resumoLei = []
     try:
         resumoLei = ask_gpt_3_to_explain_law(textoLei, justificativa)
     except Exception as e:
         send_email(get_erro_subject('erroGPT3'), get_erro_message('erroGPT3', proposal, proposalIndex))
-        print("Erro no GPT-3: \n")
+        log.error("Erro no GPT-3: \n")
         return e
 
     if validateJSON(resumoLei['choices'][0]['message']['content']):
-        print("Resposta do GPT-3: " + str(resumoLei))
+        log.error("Resposta do GPT-3: " + str(resumoLei))
         return {
             "TITULO": json.loads(resumoLei['choices'][0]['message']['content'])['TITULO'].upper(),
             "RESUMO": json.loads(resumoLei['choices'][0]['message']['content'])['RESUMO']

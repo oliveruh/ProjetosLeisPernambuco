@@ -3,7 +3,13 @@ import sys
 import boto3
 import hashlib
 from app import create_app
+import logging
 
+# Setting up logging
+logging.basicConfig(level=logging.NOTSET)
+log = logging.getLogger(__name__)
+
+# Setting up app context
 app = create_app()
 
 # get an access token, local (from) directory, and S3 (to) directory
@@ -31,16 +37,16 @@ for root, dirs, files in os.walk(local_directory):
     with open(local_path, 'rb') as f:
         local_md5 = hashlib.md5(f.read()).hexdigest()
 
-    print( 'Searching "%s" in "%s"' % (s3_key, bucket))
+    log.info( 'Searching "%s" in "%s"' % (s3_key, bucket))
     try:
         s3_object = client.head_object(Bucket=bucket, Key=s3_key)
-        print( "Path found on S3! Skipping %s..." % s3_key)
+        log.info( "Path found on S3! Skipping %s..." % s3_key)
 
         # get the MD5 hash of the S3 object
         s3_md5 = s3_object['ETag'].strip('"')
 
         if local_md5 != s3_md5:
-            print(f"Updating {local_path} to {bucket}/{s3_key}...")
+            log.info(f"Updating {local_path} to {bucket}/{s3_key}...")
             # upload the file to S3
             if (s3_key.split('.')[1] == 'html'):
                 client.upload_file(local_path, bucket, s3_key, ExtraArgs={'ContentType': "text/html"})
@@ -51,12 +57,11 @@ for root, dirs, files in os.walk(local_directory):
             else:
                 client.upload_file(local_path, bucket, s3_key)
         else:
-            print(f"{local_path} already exists in S3 and has not been modified.")
+            log.info(f"{local_path} already exists in S3 and has not been modified.")
 
     except:
-        print( "Uploading %s..." % s3_key)
+        log.info( "Uploading %s..." % s3_key)
         if (s3_key.split('.')[1] == 'html'):
-            print("Pegou!")
             client.upload_file(local_path, bucket, s3_key, ExtraArgs={'ContentType': "text/html"})
         elif (s3_key.split('.')[1] == 'css'):
             client.upload_file(local_path, bucket, s3_key, ExtraArgs={'ContentType': "text/css"})
