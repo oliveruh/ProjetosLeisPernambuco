@@ -1,4 +1,4 @@
-name: [Sem Verificação] Projetos de Lei de Pernambuco (WebScrapping + AI)
+name: Atualizar Site
 
 on:
   workflow_dispatch:
