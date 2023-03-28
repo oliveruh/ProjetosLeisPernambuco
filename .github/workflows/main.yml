@@ -12,8 +12,8 @@ jobs:
     - name: Deploy code to Lambda
       uses: mariamrf/py-lambda-action@v1.0.0
       with:
-        lambda_layer_arn: 'arn:aws:lambda:us-east-1:364333541445:layer:myReqs'
-        lambda_function_name: 'lawLogger'
+        lambda_layer_arn: 'arn:aws:lambda:us-east-1:364333541445:layer:myNewLayer'
+        lambda_function_name: 'MyLawLogger'
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
