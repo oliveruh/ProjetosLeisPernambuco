@@ -1,3 +1,4 @@
+name: deploy-py-lambda
 on:
   push:
     branches:
