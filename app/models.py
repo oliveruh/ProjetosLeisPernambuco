@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from app import db 
 from app.utils import ellipsize_text
 
@@ -94,7 +94,7 @@ class ProjetoDeLeiResumo(db.Model):
     __tablename__ = 'PROJETO_DE_LEI_RESUMO'
     id = db.Column(db.Integer, primary_key=True)
     resumoProjeto = db.Column(db.Text, nullable=False)
-    dataPublicacaoAdicionada = db.Column(db.DateTime, default=datetime.time, nullable=False)
+    dataPublicacaoAdicionada = db.Column(db.TIMESTAMP, default=datetime.now(), nullable=False)
     projetoId = db.Column(db.Integer, db.ForeignKey('PROJETO_DE_LEI.id'), nullable=False)
     resumoTitulo = db.Column(db.String(255))
     projeto = db.relationship('ProjetoDeLei', backref='resumos')
