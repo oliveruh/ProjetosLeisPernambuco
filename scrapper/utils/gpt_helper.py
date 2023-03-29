@@ -11,9 +11,6 @@ app = create_app()
 
 openai.api_key = app.config['OPENAI_API_KEY']
 
-# Load your API key from an environment variable or secret management service
-openai.api_key = os.getenv("OPENAI_API_KEY")
-
 def ask_gpt_3_to_explain_law(textoLei, justificativa):
 
     return openai.ChatCompletion.create(
