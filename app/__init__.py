@@ -14,6 +14,8 @@ def load_config(app):
     app.config['EMAIL_PORT'] = os.environ.get('EMAIL_PORT')
     app.config['RECEIVER_EMAIL'] = os.environ.get('RECEIVER_EMAIL')
 
+    app.config['OPENAI_API_KEY'] = os.environ.get('OPENAI_API_KEY')
+
     app.config['S3_BUCKET'] = os.environ.get('S3_BUCKET')
     app.config['AWS_ACCESS_KEY'] = os.environ.get('AWS_ACCESS_KEY')
     app.config['AWS_SECRET_ACCESS_KEY'] = os.environ.get('AWS_SECRET_ACCESS_KEY')
