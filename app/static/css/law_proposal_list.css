@@ -214,7 +214,7 @@ h1 {
         grid-template-columns: 1fr;
     }
     .list li h2 {
-        font-size: 1.8em;
+        font-size: 1.2em;
     }
     .list li p.date-published {
         font-size: 0.8em;
@@ -227,7 +227,7 @@ h1 {
         font-size: 0.95em;
     }
     .list li span.read-more {
-        font-size: 0.6em;
+        font-size: 1em;
     }
     .north-lion {
         justify-self: center;

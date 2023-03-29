@@ -1,4 +1,4 @@
-name: Atualizar Site
+name: Atualização Manual
 
 on:
   workflow_dispatch:

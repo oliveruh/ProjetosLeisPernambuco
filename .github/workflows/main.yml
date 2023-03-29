@@ -1,4 +1,4 @@
-name: Projetos de Lei de Pernambuco (WebScrapping + AI)
+name: Atualização Automática
 
 on:
   schedule:
