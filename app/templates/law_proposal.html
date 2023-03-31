@@ -7,13 +7,13 @@
       <meta property="og:url" content="{{ '/projeto-de-lei/' + proposal['id'] }}" />
       <meta property="og:title" content="{{ proposal['resumoTitulo'] }}" />
       <meta property="og:description" content="{{ proposal['resumoProjeto'] }}" />
-      <meta property="og:image" content="https://peoggenerator-oliverbot.vercel.app/open_graph_image.jpg?subtitle=Publicado em {{ proposal['dataPublicacao'] }} - Proposto por {{ proposal['nomeAutor'] }}&title={{ proposal['resumoTitulo'] }}" />
+      <meta property="og:image" content="https://peoggenerator-oliverbot.vercel.app/open_graph_image.jpg?subtitle=Publicado em {{ proposal['dataPublicacao'] }} - Proposto por {{ proposal['nomeAutor'].upper() }}&title={{ proposal['resumoTitulo'] }}" />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@ProjetosLeisPE" />
       <meta name="twitter:creator" content="@oliveruh_" />
       <meta name="twitter:title" content="{{ proposal['resumoTitulo'] }}" />
       <meta name="twitter:description" content="{{ proposal['resumoProjeto'] }}" />
-      <meta name="twitter:image" content="https://peoggenerator-oliverbot.vercel.app/open_graph_image.jpg?subtitle=Publicado em {{ proposal['dataPublicacao'] }} - Proposto por {{ proposal['nomeAutor'] }}&title={{ proposal['resumoTitulo'] }}" />
+      <meta name="twitter:image" content="https://peoggenerator-oliverbot.vercel.app/open_graph_image.jpg?subtitle=Publicado em {{ proposal['dataPublicacao'] }} - Proposto por {{ proposal['nomeAutor'].upper() }}&title={{ proposal['resumoTitulo'] }}" />
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
       <link rel="icon" href="../static/img/pe-flag.webp" type="image/gif" >
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
