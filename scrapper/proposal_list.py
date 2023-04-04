@@ -21,7 +21,7 @@ def scrap_proposal_list(page):
     'field-filter-data-proposicoes': ''}
 
 
-    return requests.request("POST", url, data=payload)
+    return requests.request("POST", url, data=payload, headers={'Cookie': "PHPSESSID=a4l3fkd963dq7rl1vb5fd9c236"})
 
 def parse_data(response):
     soup = BeautifulSoup(response.content, "html.parser")

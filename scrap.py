@@ -1,4 +1,5 @@
 import logging
+import time
 import os
 
 from app import create_app
@@ -22,10 +23,10 @@ def success_scrapping(value):
     with open(env_file, "a") as myfile:
         myfile.write(f"SUCCESS_SCRAPPING={value}")
 
-def find_new_proposals(proposals, last_proposal_date):
+def find_new_proposals(proposals, last_proposal_date, page=1):
     log.info('Searching for new proposals...')
 
-    new_proposals = [proposal for proposal in proposals if proposal['Data da publicação'] > last_proposal_date]
+    new_proposals = [proposal for proposal in proposals if time.strptime(proposal['Data da publicação'], "%d/%m/%Y") > last_proposal_date]
 
     qntd_proposals = len(new_proposals)
     new_proposals_msg = 'No new proposals found!'
@@ -35,12 +36,10 @@ def find_new_proposals(proposals, last_proposal_date):
         success_status = 'true'
         new_proposals_msg = f'New proposal{"s" if qntd_proposals > 1 else ""} found!'
 
-        if qntd_proposals > 50:
-            new_proposals_msg += '\nMore than 50 proposals found!\nGoing to third page...'
-            new_proposals.extend(scrap_current_proposals(3))
-        elif qntd_proposals > 25:
-            new_proposals_msg += '\nMore than 25 proposals found!\nGoing to second page...'
-            new_proposals.extend(scrap_current_proposals(2))
+        if qntd_proposals >= 25:
+            new_page = page + 1
+            new_proposals_msg += f'\nMore than 25 proposals found!\nGoing to page {str(new_page)}...'
+            new_proposals.extend(find_new_proposals(scrap_current_proposals(new_page), last_proposal_date, new_page))
 
     success_scrapping(success_status)
     log.info(new_proposals_msg)
@@ -66,7 +65,7 @@ def proccess_new_proposals(new_proposals):
 
 def main():
     proposals = scrap_current_proposals()
-    last_proposal_date = ProjetoDeLei.get_last_dataPublicacao()
+    last_proposal_date = time.strptime(ProjetoDeLei.get_last_dataPublicacao(), "%d/%m/%Y")
 
     new_proposals = find_new_proposals(proposals, last_proposal_date)
 
