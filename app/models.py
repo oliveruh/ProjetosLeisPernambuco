@@ -64,7 +64,7 @@ class Proposicao(db.Model):
             Proposicao.nomeAutor,
             ProjetoDeLeiResumo.resumoTitulo,
             ProjetoDeLeiResumo.resumoProjeto
-        ).order_by(ProjetoDeLei.dataPublicacao.desc()).all()
+        ).order_by(func.STR_TO_DATE(ProjetoDeLei.dataPublicacao, '%d/%m/%Y').desc()).all()
         return [proposal._asdict() for proposal in proposals]
 
     def get_all_proposal_summary_paginated(page=1, per_page=10):
@@ -75,7 +75,7 @@ class Proposicao(db.Model):
             Proposicao.nomeAutor,
             ProjetoDeLeiResumo.resumoTitulo,
             ProjetoDeLeiResumo.resumoProjeto
-        ).order_by(ProjetoDeLei.dataPublicacao.desc()).paginate(page=page, per_page=per_page, count=True)
+        ).order_by(func.STR_TO_DATE(ProjetoDeLei.dataPublicacao, '%d/%m/%Y').desc()).paginate(page=page, per_page=per_page, count=True)
 
         proposals = [{
             'id': proposal.id,
