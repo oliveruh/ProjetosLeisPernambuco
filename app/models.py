@@ -1,5 +1,6 @@
 from datetime import datetime
 from app import db 
+from sqlalchemy import func
 from app.utils import ellipsize_text
 
 class ProjetoDeLei(db.Model):
@@ -18,7 +19,7 @@ class ProjetoDeLei(db.Model):
 
     @classmethod
     def get_last_dataPublicacao(cls):
-        projeto = cls.query.order_by(cls.dataPublicacao.desc()).first()
+        projeto = cls.query.order_by(func.STR_TO_DATE(cls.dataPublicacao, '%d/%m/%Y').desc()).first()
         if projeto:
             return projeto.dataPublicacao
         return None
