@@ -45,8 +45,7 @@ def scrap_new_law_proposal(proposal, proposalIndex):
         resumoLei = ask_gpt_3_to_explain_law(textoLei, justificativa)
     except Exception as e:
         send_email(get_erro_subject('erroGPT3'), get_erro_message('erroGPT3', proposal, proposalIndex))
-        log.error("Erro no GPT-3: \n")
-        return e
+        raise Exception("Erro no GPT-3: \n" + e)
 
     if validateJSON(resumoLei['choices'][0]['message']['content']):
         log.error("Resposta do GPT-3: " + str(resumoLei))
