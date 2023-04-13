@@ -1,0 +1,32 @@
+name: Tweetar Últimos Projetos de Lei
+
+on:
+  schedule:
+    - cron: "0 15 * * 1-5"
+
+env:
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+
+jobs:
+  law-proposal-tweet:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixando repositório
+        uses: actions/checkout@v2
+      - name: Configurando Python
+        uses: actions/setup-python@v2.0.0
+        with:
+          python-version: '3.11'
+      - name: Instalando dependências
+        run: pip install -r requirements.txt
+      - name: Criando arquivo com variáveis de ambiente
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          envkey_FLASK_APP: ${{ secrets.FLASK_APP }}
+          envkey_CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
+          envkey_ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          envkey_OAUTH_NONCE: ${{ secrets.OAUTH_NONCE }}
+          envkey_OAUTH_SIGNATURE: ${{ secrets.OAUTH_SIGNATURE }}
+      - name: Publicando tweets com últimos 5 Projetos de Lei
+        run: python tweeter.py
