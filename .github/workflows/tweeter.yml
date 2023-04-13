@@ -28,5 +28,6 @@ jobs:
           envkey_ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           envkey_OAUTH_NONCE: ${{ secrets.OAUTH_NONCE }}
           envkey_OAUTH_SIGNATURE: ${{ secrets.OAUTH_SIGNATURE }}
+          envkey_DATABASE_URI: ${{ secrets.DATABASE_URI }}
       - name: Publicando tweets com últimos 5 Projetos de Lei
         run: python tweeter.py
