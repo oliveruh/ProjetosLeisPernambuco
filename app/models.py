@@ -108,7 +108,7 @@ class ProjetoDeLeiResumo(db.Model):
         return resumo
 
     def get_latest_resumos():
-        today = datetime.today() - timedelta(days=1)
+        today = datetime.today()
         start_of_day = datetime.combine(today, datetime.min.time())
         end_of_day = datetime.combine(today + timedelta(days=1), datetime.min.time())
         print(start_of_day, end_of_day)
