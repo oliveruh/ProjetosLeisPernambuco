@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from app import db 
 from sqlalchemy import func
 from app.utils import ellipsize_text
@@ -106,3 +106,16 @@ class ProjetoDeLeiResumo(db.Model):
         db.session.add(resumo)
         db.session.commit()
         return resumo
+
+    def get_latest_resumos():
+        today = datetime.today() - timedelta(days=1)
+        start_of_day = datetime.combine(today, datetime.min.time())
+        end_of_day = datetime.combine(today + timedelta(days=1), datetime.min.time())
+        print(start_of_day, end_of_day)
+        latest_resumos = ProjetoDeLeiResumo.query.filter(
+            ProjetoDeLeiResumo.dataPublicacaoAdicionada >= start_of_day,
+            ProjetoDeLeiResumo.dataPublicacaoAdicionada < end_of_day
+        ).order_by(
+            ProjetoDeLeiResumo.dataPublicacaoAdicionada.desc()
+        ).limit(5).all()
+        return latest_resumos

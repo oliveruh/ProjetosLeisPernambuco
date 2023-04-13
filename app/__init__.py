@@ -20,6 +20,14 @@ def load_config(app):
     app.config['AWS_ACCESS_KEY'] = os.environ.get('AWS_ACCESS_KEY')
     app.config['AWS_SECRET_ACCESS_KEY'] = os.environ.get('AWS_SECRET_ACCESS_KEY')
 
+    app.config['CONSUMER_KEY'] = os.environ.get('CONSUMER_KEY')
+    app.config['CONSUMER_SECRET'] = os.environ.get('CONSUMER_SECRET')
+    app.config['ACCESS_TOKEN'] = os.environ.get('ACCESS_TOKEN')
+    app.config['ACCESS_TOKEN_SECRET'] = os.environ.get('ACCESS_TOKEN_SECRET')
+
+    app.config['OAUTH_NONCE'] = os.environ.get('OAUTH_NONCE')
+    app.config['OAUTH_SIGNATURE'] = os.environ.get('OAUTH_SIGNATURE')
+
 
 def create_app():
     app = Flask(__name__)
